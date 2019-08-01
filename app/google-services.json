@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "863879362326",
+    "firebase_url": "https://travelmantics-alc-challenge-2.firebaseio.com",
+    "project_id": "travelmantics-alc-challenge-2",
+    "storage_bucket": "travelmantics-alc-challenge-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863879362326:android:eebddd414f1c9fdf",
+        "android_client_info": {
+          "package_name": "com.example.alcchallenge2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863879362326-8jl3pvjuu9edi358ll0q7s8ru5p4pj14.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alcchallenge2",
+            "certificate_hash": "14b44fd7952b882c550acac8c9703f3bbfcb8d2d"
+          }
+        },
+        {
+          "client_id": "863879362326-dd6o7hejs00nanodd8hemq0bdb4kk0pa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj4KnENMWX9mPsEFX8hKbzmJFb8FB7SUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863879362326-dd6o7hejs00nanodd8hemq0bdb4kk0pa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
