@@ -5,4 +5,6 @@
         android:id="@+id/insert_menu"
         android:title="New travel deal"
         app:showAsAction="never" />
+
+
 </menu>

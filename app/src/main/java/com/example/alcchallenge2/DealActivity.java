@@ -1,5 +1,6 @@
 package com.example.alcchallenge2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.alcchallenge2.model.TravelDeal;
+import com.example.alcchallenge2.utils.FirebaseUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,6 +25,7 @@ public class DealActivity extends AppCompatActivity {
     private String descriptionInput;
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
+    private TravelDeal travelDeal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,16 @@ public class DealActivity extends AppCompatActivity {
         databaseReference = FirebaseUtil.databaseReference;
 
         initViews();
+        Intent intent = getIntent();
+        TravelDeal gottenDeal = (TravelDeal) intent.getSerializableExtra("Deal");
+        if (gottenDeal == null) {
+            travelDeal = new TravelDeal();
+        }
+        this.travelDeal = gottenDeal;
+        assert gottenDeal != null;
+        titleEdittext.setText(gottenDeal.getTitle());
+        descriptionEdittext.setText(gottenDeal.getDescription());
+        priceEdittext.setText(gottenDeal.getPrice());
     }
 
     private void initViews() {
@@ -52,12 +66,17 @@ public class DealActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_menu_id:
+                saveDeal();
+                Toast.makeText(this, "deal saved", Toast.LENGTH_SHORT).show();
+                cleanContent();
+                backToListActivity();
+                return true;
+            case R.id.delete_menu:
+                deleteDeal();
+                Toast.makeText(this, "Deal deleted", Toast.LENGTH_SHORT).show();
+                backToListActivity();
+                return true;
 
-                    saveDeal();
-                    Toast.makeText(this, "deal saved", Toast.LENGTH_SHORT).show();
-                    cleanContent();
-
-                    return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -72,12 +91,28 @@ public class DealActivity extends AppCompatActivity {
     }
 
     private void saveDeal() {
-        titleInput = titleEdittext.getText().toString().trim();
-        descriptionInput = descriptionEdittext.getText().toString().trim();
-        priceInput = priceEdittext.getText().toString().trim();
-        TravelDeal travelDeal = new TravelDeal(titleInput, descriptionInput,priceInput, "");
-        databaseReference.push().setValue(travelDeal);
+        travelDeal.setTitle(titleEdittext.getText().toString().trim());
+        travelDeal.setDescription(descriptionEdittext.getText().toString().trim());
+        travelDeal.setPrice(priceEdittext.getText().toString().trim());
+        TravelDeal travelDeal = new TravelDeal(titleInput, descriptionInput, priceInput, "");
+        if (travelDeal.getId() == null) {
+            databaseReference.push().setValue(travelDeal);
+        } else {
+            databaseReference.child(travelDeal.getId()).setValue(travelDeal);
+        }
+    }
 
+    private void deleteDeal() {
+        if (travelDeal == null) {
+            Toast.makeText(this, "save data before deleting", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            databaseReference.child(travelDeal.getId()).removeValue();
+        }
+    }
+
+    private void backToListActivity() {
+        startActivity(new Intent(this, ListActivity.class));
     }
 
     private Boolean validateViews() {

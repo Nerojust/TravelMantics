@@ -6,7 +6,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".AuthenticationActivity">
+    tools:context=".activities.AuthenticationActivity">
 
     <Button
         android:layout_width="250dp"

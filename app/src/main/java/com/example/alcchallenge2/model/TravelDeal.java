@@ -1,4 +1,4 @@
-package com.example.alcchallenge2;
+package com.example.alcchallenge2.model;
 
 import java.io.Serializable;
 

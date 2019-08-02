@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alcchallenge2.DealActivity;
-import com.example.alcchallenge2.FirebaseUtil;
+import com.example.alcchallenge2.utils.FirebaseUtil;
 import com.example.alcchallenge2.R;
-import com.example.alcchallenge2.TravelDeal;
+import com.example.alcchallenge2.model.TravelDeal;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
