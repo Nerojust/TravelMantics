@@ -2,6 +2,7 @@ package com.example.alcchallenge2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.alcchallenge2.adapter.DealsAdapter;
 import com.example.alcchallenge2.model.TravelDeal;
 import com.example.alcchallenge2.utils.FirebaseUtil;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,20 +37,19 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        FirebaseUtil.openFirebaseReference("traveldeals");
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        final DealsAdapter dealsAdapter = new DealsAdapter();
-        recyclerView.setAdapter(dealsAdapter);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        FirebaseUtil.openFirebaseReference(this, "traveldeals");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.list_activity_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.insert_menu);
+        if (FirebaseUtil.isAdmin){
+            menuItem.setVisible(true);
+        }else {
+            menuItem.setVisible(false);
+        }
         return true;
     }
 
@@ -57,9 +60,41 @@ public class ListActivity extends AppCompatActivity {
                 startActivity(new Intent(this, DealActivity.class));
 
                 return true;
+            case R.id.logout_menu:
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Logout", "user logged out: ");
+                                FirebaseUtil.attachListener();
+                            }
+                        });
+                FirebaseUtil.detachListenter();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+    public void showMenu(){
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onPause() {
+        FirebaseUtil.detachListenter();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        FirebaseUtil.attachListener();
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        final DealsAdapter dealsAdapter = new DealsAdapter();
+        recyclerView.setAdapter(dealsAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        super.onResume();
     }
 }

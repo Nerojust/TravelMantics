@@ -2,7 +2,6 @@ package com.example.alcchallenge2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,9 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class DealActivity extends AppCompatActivity {
     private static final String TAG = "Signup";
     EditText titleEdittext, priceEdittext, descriptionEdittext;
-    private String titleInput;
-    private String priceInput;
-    private String descriptionInput;
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private TravelDeal travelDeal;
@@ -32,21 +28,20 @@ public class DealActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        FirebaseUtil.openFirebaseReference("traveldeals");
         firebaseDatabase = FirebaseUtil.firebaseDatabase;
         databaseReference = FirebaseUtil.databaseReference;
 
         initViews();
         Intent intent = getIntent();
-        TravelDeal gottenDeal = (TravelDeal) intent.getSerializableExtra("Deal");
-        if (gottenDeal == null) {
+        TravelDeal travelDeal = (TravelDeal) intent.getSerializableExtra("Deal");
+        if (travelDeal == null) {
             travelDeal = new TravelDeal();
         }
-        this.travelDeal = gottenDeal;
-        assert gottenDeal != null;
-        titleEdittext.setText(gottenDeal.getTitle());
-        descriptionEdittext.setText(gottenDeal.getDescription());
-        priceEdittext.setText(gottenDeal.getPrice());
+        this.travelDeal = travelDeal;
+        titleEdittext.setText(travelDeal.getTitle());
+        descriptionEdittext.setText(travelDeal.getDescription());
+        priceEdittext.setText(travelDeal.getPrice());
+
     }
 
     private void initViews() {
@@ -59,7 +54,22 @@ public class DealActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.save_menu, menu);
+        if (FirebaseUtil.isAdmin) {
+            menu.findItem(R.id.delete_menu).setVisible(true);
+            menu.findItem(R.id.save_menu_id).setVisible(true);
+            enableEditexts(true);
+        } else {
+            menu.findItem(R.id.delete_menu).setVisible(false);
+            menu.findItem(R.id.save_menu_id).setVisible(false);
+            enableEditexts(false);
+        }
         return true;
+    }
+
+    public void enableEditexts(boolean isEnabled) {
+        titleEdittext.setEnabled(isEnabled);
+        descriptionEdittext.setEnabled(isEnabled);
+        priceEdittext.setEnabled(isEnabled);
     }
 
     @Override
@@ -91,10 +101,10 @@ public class DealActivity extends AppCompatActivity {
     }
 
     private void saveDeal() {
+
         travelDeal.setTitle(titleEdittext.getText().toString().trim());
         travelDeal.setDescription(descriptionEdittext.getText().toString().trim());
         travelDeal.setPrice(priceEdittext.getText().toString().trim());
-        TravelDeal travelDeal = new TravelDeal(titleInput, descriptionInput, priceInput, "");
         if (travelDeal.getId() == null) {
             databaseReference.push().setValue(travelDeal);
         } else {
@@ -114,8 +124,8 @@ public class DealActivity extends AppCompatActivity {
     private void backToListActivity() {
         startActivity(new Intent(this, ListActivity.class));
     }
-
-    private Boolean validateViews() {
+}
+   /* private Boolean validateViews() {
         if (TextUtils.isEmpty(titleInput)) {
             Toast.makeText(this, "title is required", Toast.LENGTH_SHORT).show();
             return false;
@@ -130,4 +140,4 @@ public class DealActivity extends AppCompatActivity {
 
         return true;
     }
-}
+}*/

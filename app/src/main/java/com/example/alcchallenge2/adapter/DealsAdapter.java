@@ -1,5 +1,6 @@
 package com.example.alcchallenge2.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -26,10 +27,9 @@ import java.util.ArrayList;
 
 public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHolder> {
     private ArrayList<TravelDeal> dealsList;
+    private Activity activity;
 
     public DealsAdapter() {
-        FirebaseUtil.openFirebaseReference("traveldeals");
-        FirebaseDatabase firebaseDatabase = FirebaseUtil.firebaseDatabase;
         DatabaseReference databaseReference = FirebaseUtil.databaseReference;
         dealsList = FirebaseUtil.dealArrayList;
         ChildEventListener childEventListener = new ChildEventListener() {
