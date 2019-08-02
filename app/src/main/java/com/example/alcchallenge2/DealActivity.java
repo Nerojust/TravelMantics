@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class SignUpActivity extends AppCompatActivity {
+public class DealActivity extends AppCompatActivity {
     private static final String TAG = "Signup";
     EditText titleEdittext, priceEdittext, descriptionEdittext;
     private String titleInput;
@@ -58,8 +58,6 @@ public class SignUpActivity extends AppCompatActivity {
                     cleanContent();
 
                     return true;
-
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -75,9 +73,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void saveDeal() {
         titleInput = titleEdittext.getText().toString().trim();
-        descriptionInput = priceEdittext.getText().toString().trim();
-        priceInput = descriptionEdittext.getText().toString().trim();
-        TravelDeal travelDeal = new TravelDeal(titleInput, descriptionInput, priceInput, "");
+        descriptionInput = descriptionEdittext.getText().toString().trim();
+        priceInput = priceEdittext.getText().toString().trim();
+        TravelDeal travelDeal = new TravelDeal(titleInput, descriptionInput,priceInput, "");
         databaseReference.push().setValue(travelDeal);
 
     }

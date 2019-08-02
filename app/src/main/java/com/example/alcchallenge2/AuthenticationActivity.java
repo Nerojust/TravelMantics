@@ -31,7 +31,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AuthenticationActivity.this, SignUpActivity.class));
+                startActivity(new Intent(AuthenticationActivity.this, DealActivity.class));
             }
         });
 

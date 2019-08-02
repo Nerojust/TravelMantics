@@ -1,6 +1,8 @@
 package com.example.alcchallenge2;
 
-public class TravelDeal {
+import java.io.Serializable;
+
+public class TravelDeal implements Serializable {
     private String id, title, description, price, imageUrl;
 
     public TravelDeal() {

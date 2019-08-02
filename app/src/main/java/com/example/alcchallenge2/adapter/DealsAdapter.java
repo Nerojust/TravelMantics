@@ -1,6 +1,8 @@
 package com.example.alcchallenge2.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.alcchallenge2.DealActivity;
 import com.example.alcchallenge2.FirebaseUtil;
 import com.example.alcchallenge2.R;
 import com.example.alcchallenge2.TravelDeal;
@@ -83,7 +86,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
         return dealsList.size();
     }
 
-    class DealViewHolder extends RecyclerView.ViewHolder {
+    class DealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvTitle, description, price;
 
         DealViewHolder(@NonNull View itemView) {
@@ -91,12 +94,24 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
             tvTitle = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             price = itemView.findViewById(R.id.price);
+            itemView.setOnClickListener(this);
         }
 
         void bind(TravelDeal travelDeal) {
             tvTitle.setText(travelDeal.getTitle());
             description.setText(travelDeal.getDescription());
             price.setText(travelDeal.getPrice());
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Log.d("Adapter", "onClick: " + position);
+            TravelDeal selectedDeal = dealsList.get(position);
+            Intent intent = new Intent(view.getContext(), DealActivity.class);
+            intent.putExtra("Deal", selectedDeal);
+            view.getContext().startActivity(intent);
+
         }
     }
 }
