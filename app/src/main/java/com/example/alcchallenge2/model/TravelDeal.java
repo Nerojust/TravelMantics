@@ -3,17 +3,18 @@ package com.example.alcchallenge2.model;
 import java.io.Serializable;
 
 public class TravelDeal implements Serializable {
-    private String id, title, description, price, imageUrl;
+    private String id, title, description, price, imageUrl, imageName;
 
     public TravelDeal() {
 
     }
 
-    public TravelDeal(String title, String description, String price, String imageUrl) {
+    public TravelDeal(String title, String description, String price, String imageUrl, String imageName) {
         this.title = title;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.imageName = imageName;
     }
 
     public String getId() {
@@ -54,5 +55,13 @@ public class TravelDeal implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

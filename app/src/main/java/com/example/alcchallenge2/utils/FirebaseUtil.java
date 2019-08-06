@@ -1,6 +1,5 @@
 package com.example.alcchallenge2.utils;
 
-import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,11 +10,14 @@ import com.example.alcchallenge2.ListActivity;
 import com.example.alcchallenge2.model.TravelDeal;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +30,8 @@ public class FirebaseUtil {
     public static DatabaseReference databaseReference;
     public static FirebaseUtil firebaseUtil;
     public static FirebaseAuth firebaseAuth;
+    public static FirebaseStorage firebaseStorage;
+    public static StorageReference storageReference;
     public static FirebaseAuth.AuthStateListener authStateListener;
     public static ArrayList<TravelDeal> dealArrayList;
     public static ListActivity activityCall;
@@ -49,6 +53,7 @@ public class FirebaseUtil {
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     if (firebaseAuth.getCurrentUser() == null) {
                         FirebaseUtil.signIn();
+
                     } else {
                         String userId = firebaseAuth.getUid();
                         FirebaseUtil.checkAdmin(userId);
@@ -56,6 +61,7 @@ public class FirebaseUtil {
                     Toast.makeText(activity.getApplicationContext(), "Welcome Back!", Toast.LENGTH_SHORT).show();
                 }
             };
+            connectStorage();
 
         }
         dealArrayList = new ArrayList<>();
@@ -110,6 +116,15 @@ public class FirebaseUtil {
                         .setAvailableProviders(providers)
                         .build(),
                 SIGN_IN);
+        firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user.getUid() == null){
+
+                }
+            }
+        });
     }
 
     public static void attachListener() {
@@ -118,5 +133,11 @@ public class FirebaseUtil {
 
     public static void detachListenter() {
         firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
+    public static void connectStorage() {
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference().child("deals_pic");
+
     }
 }

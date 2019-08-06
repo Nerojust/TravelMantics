@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,14 +15,15 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alcchallenge2.DealActivity;
-import com.example.alcchallenge2.utils.FirebaseUtil;
 import com.example.alcchallenge2.R;
 import com.example.alcchallenge2.model.TravelDeal;
+import com.example.alcchallenge2.utils.FirebaseUtil;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -88,12 +90,14 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
 
     class DealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvTitle, description, price;
+        ImageView dealImage;
 
         DealViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             price = itemView.findViewById(R.id.price);
+            dealImage = itemView.findViewById(R.id.listImageview);
             itemView.setOnClickListener(this);
         }
 
@@ -101,6 +105,22 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
             tvTitle.setText(travelDeal.getTitle());
             description.setText(travelDeal.getDescription());
             price.setText(travelDeal.getPrice());
+            try {
+                showImage(travelDeal.getImageUrl());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void showImage(String url) {
+            if (url != null && !url.isEmpty()) {
+                Picasso.get()
+                        .load(url)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .resize(160, 160)
+                        .centerCrop()
+                        .into(dealImage);
+            }
         }
 
         @Override
@@ -111,7 +131,6 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
             Intent intent = new Intent(view.getContext(), DealActivity.class);
             intent.putExtra("Deal", selectedDeal);
             view.getContext().startActivity(intent);
-
         }
     }
 }
