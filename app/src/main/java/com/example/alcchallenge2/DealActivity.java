@@ -40,6 +40,7 @@ public class DealActivity extends AppCompatActivity {
     EditText titleEdittext, priceEdittext, descriptionEdittext;
     Button imageButton;
     ImageView imageView;
+    private final int REQUEST_CODE = 43;
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private TravelDeal travelDeal;
@@ -88,7 +89,7 @@ public class DealActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/jpeg");
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                startActivityForResult(intent.createChooser(intent, "Insert Picture"), 43);
+                startActivityForResult(intent.createChooser(intent, "Insert Picture"), REQUEST_CODE);
             }
         });
     }
@@ -120,11 +121,13 @@ public class DealActivity extends AppCompatActivity {
         if (FirebaseUtil.isAdmin == true) {
             menu.findItem(R.id.delete_menu).setVisible(true);
             menu.findItem(R.id.save_menu_id).setVisible(true);
+            findViewById(R.id.imageView).setEnabled(true);
             enableEditexts(true);
         } else {
             menu.findItem(R.id.delete_menu).setVisible(false);
             menu.findItem(R.id.save_menu_id).setVisible(false);
             enableEditexts(false);
+            findViewById(R.id.imageView).setEnabled(false);
         }
         return true;
     }
@@ -133,7 +136,7 @@ public class DealActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 43 && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             final StorageReference reference = storageReference.child(uri.getLastPathSegment());
             uploadTask = reference.putFile(uri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
