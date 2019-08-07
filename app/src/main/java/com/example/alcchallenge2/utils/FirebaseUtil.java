@@ -116,15 +116,6 @@ public class FirebaseUtil {
                         .setAvailableProviders(providers)
                         .build(),
                 SIGN_IN);
-        firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user.getUid() == null){
-
-                }
-            }
-        });
     }
 
     public static void attachListener() {

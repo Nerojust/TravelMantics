@@ -42,7 +42,6 @@ public class DealActivity extends AppCompatActivity {
     ImageView imageView;
     private final int REQUEST_CODE = 43;
     private DatabaseReference databaseReference;
-    private FirebaseDatabase firebaseDatabase;
     private TravelDeal travelDeal;
     private StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
@@ -51,7 +50,6 @@ public class DealActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deal);
 
-        firebaseDatabase = FirebaseUtil.firebaseDatabase;
         databaseReference = FirebaseUtil.databaseReference;
 
 
@@ -122,12 +120,14 @@ public class DealActivity extends AppCompatActivity {
             menu.findItem(R.id.delete_menu).setVisible(true);
             menu.findItem(R.id.save_menu_id).setVisible(true);
             findViewById(R.id.imageView).setEnabled(true);
+            findViewById(R.id.imageButton).setVisibility(View.VISIBLE);
             enableEditexts(true);
         } else {
             menu.findItem(R.id.delete_menu).setVisible(false);
             menu.findItem(R.id.save_menu_id).setVisible(false);
             enableEditexts(false);
             findViewById(R.id.imageView).setEnabled(false);
+            findViewById(R.id.imageButton).setVisibility(View.GONE);
         }
         return true;
     }
